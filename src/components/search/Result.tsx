@@ -97,9 +97,11 @@ export function Result({ result, className }: { result: SegmentWithRelations, cl
                             </div>
 
                             {/* Subject description */}
-                            <p className="text-sm text-muted-foreground line-clamp-2">
-                                {result.subject!.description}
-                            </p>
+                            {result.subject?.description && (
+                                <p className="text-sm text-muted-foreground line-clamp-2">
+                                    {result.subject.description}
+                                </p>
+                            )}
 
                             {/* Topic tags row */}
                             {result.topics.length > 0 && (
@@ -117,7 +119,7 @@ export function Result({ result, className }: { result: SegmentWithRelations, cl
                             {/* Collapsible full transcript text */}
                             <CollapsibleCard title={t('whatTheySaid')} defaultOpen={false}>
                                 <div className="p-4">
-                                    <p className="text-sm text-gray-600 whitespace-pre-wrap">
+                                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                                         {result.text}
                                     </p>
                                 </div>
@@ -146,7 +148,7 @@ export function Result({ result, className }: { result: SegmentWithRelations, cl
                             )}
                             <CollapsibleCard title={t('whatTheySaid')} defaultOpen={false}>
                                 <div className="p-4">
-                                    <p className="text-sm text-gray-600 whitespace-pre-wrap">
+                                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                                         {result.text}
                                     </p>
                                 </div>
