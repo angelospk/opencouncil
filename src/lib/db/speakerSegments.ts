@@ -5,6 +5,18 @@ import { CouncilMeeting, City, Prisma } from '@prisma/client';
 import { PersonWithRelations } from './people';
 import { isRoleActiveAt } from '../utils';
 import { roleWithRelationsInclude } from './types';
+import { resolvePluralitySubject } from './resolveSubject';
+
+export { resolvePluralitySubject };
+
+type SubjectWithTopic = {
+    id: string;
+    name: string;
+    description: string;
+    cityId: string;
+    councilMeetingId: string;
+    topic: { id: string; name: string; colorHex: string; icon: string | null } | null;
+};
 
 export type SegmentWithRelations = {
     id: string;
@@ -16,6 +28,8 @@ export type SegmentWithRelations = {
     person: PersonWithRelations | null;
     text: string;
     summary: { text: string } | null;
+    subject?: SubjectWithTopic | null;
+    topics: { id: string; name: string; colorHex: string; icon: string | null }[];
 };
 
 const speakerSegmentWithRelationsInclude = {
@@ -63,7 +77,7 @@ function calculateEmptySegmentUtteranceTimestamps(
 ): { startTimestamp: number; endTimestamp: number } {
     const segmentDuration = segmentEnd - segmentStart;
     const utteranceDuration = Math.min(1, segmentDuration);
-    
+
     return {
         startTimestamp: segmentStart,
         endTimestamp: segmentStart + utteranceDuration
@@ -234,7 +248,7 @@ export async function addUtteranceToSegment(
     } else {
         // Get the last utterance
         const lastUtterance = segment.utterances[segment.utterances.length - 1];
-        
+
         // Start the new utterance right after the last one
         startTimestamp = lastUtterance.endTimestamp;
         // Default duration of 1 second for the new utterance
@@ -515,8 +529,21 @@ export async function getLatestSegmentsForSpeaker(
                         }
                     }
                 },
-                utterances: true,
+                utterances: {
+                    include: {
+                        discussionSubject: {
+                            include: {
+                                topic: true
+                            }
+                        }
+                    }
+                },
                 summary: true,
+                topicLabels: {
+                    include: {
+                        topic: true
+                    }
+                }
             },
             orderBy: [
                 {
@@ -544,7 +571,9 @@ export async function getLatestSegmentsForSpeaker(
             meeting: segment.meeting,
             person: segment.speakerTag?.person || null,
             text: segment.utterances.map(u => u.text).join(' '),
-            summary: segment.summary ? { text: segment.summary.text } : null
+            summary: segment.summary ? { text: segment.summary.text } : null,
+            subject: resolvePluralitySubject(segment.utterances),
+            topics: segment.topicLabels.map(tl => tl.topic)
         }))
         // Only include segments with at least 100 characters
         .filter(segment => segment.text.length >= 100);
@@ -606,8 +635,21 @@ export async function getLatestSegmentsForParty(
                         }
                     }
                 },
-                utterances: true,
+                utterances: {
+                    include: {
+                        discussionSubject: {
+                            include: {
+                                topic: true
+                            }
+                        }
+                    }
+                },
                 summary: true,
+                topicLabels: {
+                    include: {
+                        topic: true
+                    }
+                }
             },
             orderBy: [
                 {
@@ -685,7 +727,9 @@ export async function getLatestSegmentsForParty(
                 meeting: segment.meeting,
                 person: person,
                 text: text,
-                summary: segment.summary ? { text: segment.summary.text } : null
+                summary: segment.summary ? { text: segment.summary.text } : null,
+                subject: resolvePluralitySubject(segment.utterances),
+                topics: segment.topicLabels.map(tl => tl.topic)
             }];
         });
 

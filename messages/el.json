@@ -328,7 +328,9 @@
         "loading": "Φόρτωση...",
         "loadMore": "Περισσότερα",
         "recentSegments": "Πρόσφατες τοποθετήσεις",
-        "tryDifferentFilter": "Προσπαθήστε να αλλάξετε τα φίλτρα"
+        "tryDifferentFilter": "Προσπαθήστε να αλλάξετε τα φίλτρα",
+        "whatTheySaid": "Τι είπε",
+        "subjectDiscussed": "Θέμα"
     },
     "Party": {
         "currentMembers": "Μέλη",

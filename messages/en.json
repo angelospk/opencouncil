@@ -363,7 +363,9 @@
         "loadingSegments": "Loading recent statements...",
         "noSegmentsFound": "No statements found",
         "loading": "Loading...",
-        "loadMore": "Load more"
+        "loadMore": "Load more",
+        "whatTheySaid": "What they said",
+        "subjectDiscussed": "Subject discussed"
     },
     "Party": {
         "currentMembers": "Current Members",
