@@ -22,6 +22,9 @@ import { GroupedDiscussionNotice } from "./grouped-discussion-notice";
 import { ContributionCard } from "./ContributionCard";
 import { VotingSection } from "./VotingSection";
 import { AutoScrollText } from "@/components/ui/auto-scroll-text";
+import { SubjectSubscribeButton } from "./SubjectSubscribeButton";
+import { SubjectNotificationNudge } from "./SubjectNotificationNudge";
+import { SubjectSubscribeProvider } from "./SubjectSubscribeContext";
 import { formatDate, formatRelativeTime } from "@/lib/formatters/time";
 import { useTranslations, useLocale } from "next-intl";
 import { requestPollDecisionForSubject, getLastPollTimeForMeeting, getDecisionForSubject } from "@/lib/tasks/pollDecisions";
@@ -29,7 +32,7 @@ import { useSession } from "next-auth/react";
 import { DebugMetadataButton } from "@/components/ui/debug-metadata-button";
 
 export default function Subject({ subjectId }: { subjectId?: string }) {
-    const { subjects, getSpeakerTag, getPerson, getParty, meeting } = useCouncilMeetingData();
+    const { subjects, getSpeakerTag, getPerson, getParty, meeting, city } = useCouncilMeetingData();
     const { seekToAndPlay } = useVideo();
     const t = useTranslations("Subject");
     const locale = useLocale();
@@ -131,7 +134,10 @@ export default function Subject({ subjectId }: { subjectId?: string }) {
         }
     }, [subject.id]);
 
+    const subscribeLocation = location ? { id: location.id, text: location.text, coordinates: location.coordinates } : null;
+
     return (
+        <SubjectSubscribeProvider topic={topic ?? null} location={subscribeLocation} cityId={meeting.cityId}>
         <div className="min-h-screen bg-background">
             {/* Sticky Header */}
             <div className="sticky top-0 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
@@ -177,15 +183,20 @@ export default function Subject({ subjectId }: { subjectId?: string }) {
                                 )}
                             </div>
                         </div>
-                        {isSuperAdmin && (
-                            <div className="flex-shrink-0">
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                            <SubjectSubscribeButton
+                                topic={topic ?? null}
+                                location={subscribeLocation}
+                                cityId={meeting.cityId}
+                            />
+                            {isSuperAdmin ? (
                                 <DebugMetadataButton
                                     data={subject}
                                     title="Subject Metadata"
                                     tooltip="View subject metadata"
                                 />
-                            </div>
-                        )}
+                            ) : null}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -274,7 +285,7 @@ export default function Subject({ subjectId }: { subjectId?: string }) {
                 )}
 
                 {/* Summary Section (Collapsible - Open by default) */}
-                {description && (
+                {description ? (
                     <CollapsibleCard
                         icon={<FileText className="w-4 h-4" />}
                         title={t("summary")}
@@ -294,7 +305,15 @@ export default function Subject({ subjectId }: { subjectId?: string }) {
                             </div>
                         </div>
                     </CollapsibleCard>
-                )}
+                ) : null}
+
+                {/* Notification nudge sentinel — placed at ~50% content depth (after summary) */}
+                <SubjectNotificationNudge
+                    topic={topic ?? null}
+                    location={subscribeLocation}
+                    cityId={meeting.cityId}
+                    cityName={(locale === 'el' ? city.name_municipality : city.name_municipality_en).replace(/^Δήμος\s+/u, '')}
+                />
 
                 {/* Location & Map Section (Collapsible) */}
                 {location && (
@@ -545,5 +564,6 @@ export default function Subject({ subjectId }: { subjectId?: string }) {
                 )}
             </div>
         </div>
+        </SubjectSubscribeProvider>
     );
 }
