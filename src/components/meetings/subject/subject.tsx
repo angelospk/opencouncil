@@ -187,7 +187,6 @@ export default function Subject({ subjectId }: { subjectId?: string }) {
                             <SubjectSubscribeButton
                                 topic={topic ?? null}
                                 location={subscribeLocation}
-                                cityId={meeting.cityId}
                             />
                             {isSuperAdmin ? (
                                 <DebugMetadataButton
@@ -311,7 +310,6 @@ export default function Subject({ subjectId }: { subjectId?: string }) {
                 <SubjectNotificationNudge
                     topic={topic ?? null}
                     location={subscribeLocation}
-                    cityId={meeting.cityId}
                     cityName={(locale === 'el' ? city.name_municipality : city.name_municipality_en).replace(/^Δήμος\s+/u, '')}
                 />
 
