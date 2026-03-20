@@ -326,7 +326,7 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
 
     const value = {
         isPlaying,
-        currentTime: currentTimeRef.current,
+        currentTime,
         duration,
         playbackSpeed,
         currentScrollInterval,
