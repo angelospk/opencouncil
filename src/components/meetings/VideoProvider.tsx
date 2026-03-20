@@ -153,7 +153,8 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
         const timeParam = urlParams.get('t');
         if (timeParam) {
             const seconds = parseInt(timeParam, 10);
-            if (!isNaN(seconds) && playerRef.current) {
+            // Wait until player and utterances are ready before applying the deep link seek/scroll
+            if (!isNaN(seconds) && playerRef.current && utterances.length > 0) {
                 hasAppliedUrlParam.current = true;
                 currentTimeRef.current = seconds;
                 setCurrentTime(seconds);
@@ -276,7 +277,7 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
         currentTimeRef.current = time;
         setCurrentTime(time);
 
-        if (hasStartedPlaying || utterances.length > 0) {
+        if (utterances.length > 0) {
             // Use requestAnimationFrame to ensure DOM has updated
             requestAnimationFrame(() => {
                 scrollToUtterance(time);
