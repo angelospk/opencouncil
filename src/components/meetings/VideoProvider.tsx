@@ -138,11 +138,13 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
             setCurrentTime(utterances[0].startTimestamp);
         }
 
-        // Handle ?t=123 URL parameter for deep linking (one-shot to avoid re-seeking on transcript mutations)
+        // Handle ?t=123 URL parameter for deep linking (one-shot to avoid re-seeking on transcript mutations).
+        // The flag is set only after a successful seek so that if playerRef.current is not yet available
+        // (conditional render), the next effect run can retry.
         if (timeParam && !hasAppliedUrlParam.current) {
-            hasAppliedUrlParam.current = true;
             const seconds = parseInt(timeParam, 10);
             if (!isNaN(seconds) && playerRef.current) {
+                hasAppliedUrlParam.current = true;
                 currentTimeRef.current = seconds;
                 setCurrentTime(seconds);
                 // Add a longer delay and retry mechanism for scrolling
