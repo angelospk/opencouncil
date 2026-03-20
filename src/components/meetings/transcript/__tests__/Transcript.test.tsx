@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Transcript from '../Transcript';
 import { useCouncilMeetingData } from '../../CouncilMeetingDataContext';
@@ -59,8 +59,15 @@ const makeSegment = (id: string, startTimestamp: number, endTimestamp: number): 
 describe('Transcript', () => {
     let transcriptData: TranscriptType = [];
 
+    const mockIntersectionObservers: { callback: IntersectionObserverCallback }[] = [];
+
     beforeAll(() => {
         class MockIntersectionObserver {
+            callback: IntersectionObserverCallback;
+            constructor(callback: IntersectionObserverCallback) {
+                this.callback = callback;
+                mockIntersectionObservers.push(this);
+            }
             observe() { }
             unobserve() { }
             disconnect() { }
@@ -70,6 +77,11 @@ describe('Transcript', () => {
             writable: true,
             value: MockIntersectionObserver
         });
+    });
+
+    afterEach(() => {
+        mockIntersectionObservers.length = 0;
+        jest.useRealTimers();
     });
 
     beforeEach(() => {
@@ -115,5 +127,42 @@ describe('Transcript', () => {
         expect(document.getElementById('speaker-segment-seg-a')).toBeInTheDocument();
         expect(document.getElementById('speaker-segment-seg-b')).toBeInTheDocument();
         expect(document.getElementById('speaker-segment-0')).not.toBeInTheDocument();
+    });
+
+    it('updates visibleSegments and currentScrollInterval based on IntersectionObserver callback', () => {
+        jest.useFakeTimers();
+        const mockSetCurrentScrollInterval = jest.fn();
+        (useVideo as jest.Mock).mockReturnValue({
+            setCurrentScrollInterval: mockSetCurrentScrollInterval,
+            currentTime: 0
+        });
+
+        render(<Transcript />);
+
+        expect(mockIntersectionObservers.length).toBeGreaterThan(0);
+        const latestObserverCallback = mockIntersectionObservers[mockIntersectionObservers.length - 1].callback;
+
+        // Simulate IntersectionObserver callback saying seg-a is visible
+        act(() => {
+            latestObserverCallback([
+                {
+                    target: { id: 'speaker-segment-seg-a' },
+                    isIntersecting: true
+                } as any,
+                {
+                    target: { id: 'speaker-segment-seg-b' },
+                    isIntersecting: false
+                } as any
+            ], {} as any);
+        });
+
+        // Fast-forward debounce timer (500ms) inside act to resolve states
+        act(() => {
+            jest.advanceTimersByTime(500);
+        });
+
+        // calculateTimeInterval looks at [validSegments[0].startTimestamp, validSegments[last].endTimestamp]
+        // validSegments is seg-a: startTimestamp: 10, endTimestamp: 20
+        expect(mockSetCurrentScrollInterval).toHaveBeenCalledWith([10, 20]);
     });
 });

@@ -127,6 +127,10 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
     }, []);
 
     // === INITIAL TIME SETUP ===
+    // Note: We use [utterances] as a dependency because this effect needs to fire when the transcript
+    // initially loads from the network (changing from [] to populated). The hasSetInitialTime.current
+    // ref prevents this from re-running side effects during heavy transcript editing sessions, though
+    // the effect callback itself still executes on every transcript mutation.
     useEffect(() => {
         if (!hasSetInitialTime.current && utterances.length > 0) {
             hasSetInitialTime.current = true;
@@ -138,23 +142,32 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
     // === URL PARAMETER DEEP-LINK ===
     // One-shot: flag is set only after a successful seek so that if playerRef.current is not yet
     // available (conditional render), the next effect run can retry.
+    // Note: Similar to the initial time setup, this depends on [utterances] to catch the initial
+    // data load. The hasAppliedUrlParam guard prevents repeated execution of the search param
+    // parsing and seeking logic during transcript edits.
     useEffect(() => {
+        // Short-circuit early if we've already applied the deep link to avoid unnecessary parsing
+        if (hasAppliedUrlParam.current) return;
+
         const urlParams = new URLSearchParams(window.location.search);
         const timeParam = urlParams.get('t');
-        if (timeParam && !hasAppliedUrlParam.current) {
+        if (timeParam) {
             const seconds = parseInt(timeParam, 10);
-            if (!isNaN(seconds) && playerRef.current) {
+            // Wait until player and utterances are ready before applying the deep link seek/scroll
+            if (!isNaN(seconds) && playerRef.current && utterances.length > 0) {
                 hasAppliedUrlParam.current = true;
                 currentTimeRef.current = seconds;
                 setCurrentTime(seconds);
                 const scrollAttempt = (attemptsLeft: number) => {
                     setTimeout(() => {
-                        const utteranceElement = utterances
+                        const lastUtteranceBeforeTime = utterances
                             .filter((u) => u.startTimestamp <= seconds)
                             .sort((a, b) => b.startTimestamp - a.startTimestamp)[0];
 
-                        if (utteranceElement) {
-                            const element = document.getElementById(utteranceElement.id);
+                        const utteranceToScrollTo = lastUtteranceBeforeTime || utterances[0];
+
+                        if (utteranceToScrollTo) {
+                            const element = document.getElementById(utteranceToScrollTo.id);
                             if (element) {
                                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             } else if (attemptsLeft > 0) {
@@ -265,10 +278,13 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
         }
         currentTimeRef.current = time;
         setCurrentTime(time);
-        // Use requestAnimationFrame to ensure DOM has updated
-        requestAnimationFrame(() => {
-            scrollToUtterance(time);
-        });
+
+        if (utterances.length > 0) {
+            // Use requestAnimationFrame to ensure DOM has updated
+            requestAnimationFrame(() => {
+                scrollToUtterance(time);
+            });
+        }
     };
 
     /**

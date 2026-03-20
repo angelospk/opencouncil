@@ -50,7 +50,9 @@ export default function Transcript() {
         return visibleSegments.size > 0 && !visibleSegments.has(firstSegmentId);
     }, [visibleSegments, displayedSegments]);
 
-    // Helper to calculate time interval from segment indices
+    // Helper to calculate time interval from segment indices.
+    // Note: This relies on `displayedSegments` being chronologically ordered,
+    // which is guaranteed by `CouncilMeetingDataContext` providing `orderedTranscript`.
     const calculateTimeInterval = useCallback((segmentIds: string[] | Set<string>): [number, number] | null => {
         const ids = Array.isArray(segmentIds) ? new Set(segmentIds) : segmentIds;
         const validSegments = displayedSegments.filter(segment => ids.has(segment.id));
