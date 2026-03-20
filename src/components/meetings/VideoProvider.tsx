@@ -124,7 +124,7 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
         return () => {
             player?.removeEventListener('loadedmetadata', updateDuration);
         };
-    }, [utterances]);
+    }, []);
 
     // === URL PARAMETER HANDLING ===
     useEffect(() => {
