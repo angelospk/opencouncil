@@ -90,6 +90,7 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
     const playerRef = useRef<HTMLVideoElement | null>(null); // Direct reference to video element
     const [currentTime, setCurrentTime] = useState(0); // React state for UI (throttled updates)
     const hasSetInitialTime = useRef(false); // Ensures initial time is set only once
+    const hasAppliedUrlParam = useRef(false); // Ensures ?t= deep link is applied only once
 
     // Scroll to the last utterance before the seek time or the first utterance if none before
     const scrollToUtterance = useCallback((time: number) => {
@@ -137,8 +138,9 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
             setCurrentTime(utterances[0].startTimestamp);
         }
 
-        // Handle ?t=123 URL parameter for deep linking
-        if (timeParam) {
+        // Handle ?t=123 URL parameter for deep linking (one-shot to avoid re-seeking on transcript mutations)
+        if (timeParam && !hasAppliedUrlParam.current) {
+            hasAppliedUrlParam.current = true;
             const seconds = parseInt(timeParam, 10);
             if (!isNaN(seconds) && playerRef.current) {
                 currentTimeRef.current = seconds;
