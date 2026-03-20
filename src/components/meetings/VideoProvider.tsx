@@ -126,28 +126,27 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
         };
     }, []);
 
-    // === URL PARAMETER HANDLING ===
+    // === INITIAL TIME SETUP ===
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const timeParam = urlParams.get('t');
-
-        // Set initial time to first utterance only on first load
         if (!hasSetInitialTime.current && utterances.length > 0) {
             hasSetInitialTime.current = true;
             currentTimeRef.current = utterances[0].startTimestamp;
             setCurrentTime(utterances[0].startTimestamp);
         }
+    }, [utterances]);
 
-        // Handle ?t=123 URL parameter for deep linking (one-shot to avoid re-seeking on transcript mutations).
-        // The flag is set only after a successful seek so that if playerRef.current is not yet available
-        // (conditional render), the next effect run can retry.
+    // === URL PARAMETER DEEP-LINK ===
+    // One-shot: flag is set only after a successful seek so that if playerRef.current is not yet
+    // available (conditional render), the next effect run can retry.
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const timeParam = urlParams.get('t');
         if (timeParam && !hasAppliedUrlParam.current) {
             const seconds = parseInt(timeParam, 10);
             if (!isNaN(seconds) && playerRef.current) {
                 hasAppliedUrlParam.current = true;
                 currentTimeRef.current = seconds;
                 setCurrentTime(seconds);
-                // Add a longer delay and retry mechanism for scrolling
                 const scrollAttempt = (attemptsLeft: number) => {
                     setTimeout(() => {
                         const utteranceElement = utterances
@@ -159,14 +158,13 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
                             if (element) {
                                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             } else if (attemptsLeft > 0) {
-                                // If element not found, retry with one less attempt
                                 scrollAttempt(attemptsLeft - 1);
                             }
                         }
                     }, 500);
                 };
 
-                scrollAttempt(3); // Try up to 3 times
+                scrollAttempt(3);
             }
         }
     }, [utterances]);
