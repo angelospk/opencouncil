@@ -160,12 +160,14 @@ export const VideoProvider: React.FC<VideoProviderProps> = ({ children, meeting 
                 setCurrentTime(seconds);
                 const scrollAttempt = (attemptsLeft: number) => {
                     setTimeout(() => {
-                        const utteranceElement = utterances
+                        const lastUtteranceBeforeTime = utterances
                             .filter((u) => u.startTimestamp <= seconds)
                             .sort((a, b) => b.startTimestamp - a.startTimestamp)[0];
 
-                        if (utteranceElement) {
-                            const element = document.getElementById(utteranceElement.id);
+                        const utteranceToScrollTo = lastUtteranceBeforeTime || utterances[0];
+
+                        if (utteranceToScrollTo) {
+                            const element = document.getElementById(utteranceToScrollTo.id);
                             if (element) {
                                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             } else if (attemptsLeft > 0) {
