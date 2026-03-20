@@ -28,7 +28,7 @@ const createSegmentId = (segmentId: string): string => {
 export default function Transcript() {
     const { transcript: speakerSegments, getHighlight, taskStatus } = useCouncilMeetingData();
     const { options } = useTranscriptOptions();
-    const { setCurrentScrollInterval, currentTime } = useVideo();
+    const { setCurrentScrollInterval } = useVideo();
     const { enterEditMode, editingHighlight } = useHighlight();
     const containerRef = useRef<HTMLDivElement>(null);
     const [visibleSegments, setVisibleSegments] = useState<Set<string>>(new Set());
@@ -133,11 +133,15 @@ export default function Transcript() {
         });
     }, []);
 
-    // Effect to update scroll interval when visible segments change
+    // Effect to update scroll interval when visible segments change.
+    // If all segments are evicted (e.g. the only visible segment was deleted),
+    // reset to [0, 0] so the stale interval doesn't linger until the observer fires.
     useEffect(() => {
         const interval = calculateTimeInterval(visibleSegments);
         if (interval) {
             debouncedSetCurrentScrollInterval(interval);
+        } else if (visibleSegments.size === 0) {
+            debouncedSetCurrentScrollInterval([0, 0]);
         }
     }, [visibleSegments, calculateTimeInterval, debouncedSetCurrentScrollInterval]);
 
