@@ -51,27 +51,27 @@ export function PitchDeck({ locale }: { locale: string }) {
                 Φάκελοι: από αρχείο σε ζωντανή δημοτική δημοσιογραφία
             </h1>
             <p className="mt-6 max-w-2xl text-xl text-muted-foreground">
-                Μια ονοματισμένη, διαμεσοσυνεδριακή αφήγηση με πηγές — «Full Coverage» για το δημοτικό
-                συμβούλιο.
+                Μια συνεχής αφήγηση ανά υπόθεση, με πηγές. Σαν το «Full Coverage» των ειδήσεων, αλλά για
+                το δημοτικό συμβούλιο.
             </p>
         </div>,
 
         <Slide key="problem" kicker="Το πρόβλημα" title="Τα subjects είναι αποσυνδεδεμένα γεγονότα">
             <ul className="space-y-3">
-                <li>Κάθε συνεδρίαση παράγει δεκάδες θέματα, αλλά το καθένα ζει απομονωμένο.</li>
+                <li>Κάθε συνεδρίαση βγάζει δεκάδες θέματα, και το καθένα μένει μόνο του.</li>
                 <li>
-                    Η συνδρομή σε <em>topic</em> + <em>location</em> δεν αρκεί: ο πολίτης χάνει την εξέλιξη
-                    μιας συγκεκριμένης υπόθεσης μέσα στον χρόνο.
+                    Η συνδρομή σε topic + location δεν αρκεί: ο πολίτης χάνει την εξέλιξη μιας υπόθεσης μέσα
+                    στον χρόνο.
                 </li>
-                <li>Η ιστορία ενός έργου ή ενός φορέα είναι σπαρμένη σε 5–10 διαφορετικές συνεδριάσεις.</li>
+                <li>Η ιστορία ενός έργου ή ενός φορέα είναι σκορπισμένη σε 5–10 συνεδριάσεις.</li>
             </ul>
         </Slide>,
 
         <Slide key="insight" kicker="Η διαπίστωση" title="Λείπει ένα «named narrative object»">
             <p>
-                Δεν λείπει ένα ακόμη φίλτρο. Λείπει <strong>η οντότητα που σε αφορά</strong>: το Πολύκεντρο,
-                το καταφύγιο αδέσποτων, ο ποταμός Άρδας — με δικό της όνομα, δική της σελίδα και δική της
-                ροή.
+                Το πρόβλημα δεν είναι ότι λείπει ένα φίλτρο. Λείπει η ίδια η οντότητα που αφορά τον πολίτη:
+                το Πολύκεντρο, το καταφύγιο αδέσποτων, ο ποταμός Άρδας. Καθεμιά με δικό της όνομα και δική
+                της σελίδα.
             </p>
         </Slide>,
 
@@ -132,8 +132,8 @@ export function PitchDeck({ locale }: { locale: string }) {
             </div>
             <p className="mt-4 text-lg">
                 <strong className="text-primary">{PILOT_STATS.citationPct}%</strong> των subjects έχουν{" "}
-                <strong>ήδη</strong> πηγές · τα παραδείγματα του #291 <strong>δεν</strong> ήταν
-                cherry-picked — προέκυψαν από τα ίδια τα δεδομένα.
+                <strong>ήδη</strong> πηγές. Τα παραδείγματα του #291 <strong>δεν</strong> ήταν
+                cherry-picked· προέκυψαν από τα ίδια τα δεδομένα.
             </p>
         </div>,
 
@@ -192,7 +192,7 @@ export function PitchDeck({ locale }: { locale: string }) {
             <ul className="space-y-3">
                 <li>
                     Το <code className="rounded bg-muted px-1.5 py-0.5 text-base">Subject.contextCitationUrls</code>{" "}
-                    παράγεται ήδη από Claude web_search — {PILOT_STATS.withCitations}/{PILOT_STATS.subjects}{" "}
+                    παράγεται ήδη από Claude web_search: {PILOT_STATS.withCitations}/{PILOT_STATS.subjects}{" "}
                     subjects το έχουν.
                 </li>
                 <li>
@@ -232,9 +232,9 @@ export function PitchDeck({ locale }: { locale: string }) {
                 <Quote className="mt-1 h-8 w-8 shrink-0 text-primary/40" />
                 <div>
                     <p>
-                        Το «Stories» κουβαλά βάρος από το Instagram — εφήμερο, προσωπικό, ανάλαφρο. Ο{" "}
-                        <strong>«Φάκελος»</strong> δηλώνει ακριβώς το αντίθετο: θεσμική μνήμη, σοβαρότητα,
-                        τεκμηρίωση.
+                        Το «Stories» παραπέμπει στο Instagram, σε κάτι εφήμερο και προσωπικό. Ο{" "}
+                        <strong>«Φάκελος»</strong> λέει το αντίθετο: θεσμική μνήμη που τεκμηριώνεται και
+                        μένει.
                     </p>
                     <p className="mt-3">Είναι η λέξη που χρησιμοποιεί ήδη η δημοσιογραφία για μια υπόθεση που εξελίσσεται.</p>
                 </div>
@@ -249,7 +249,7 @@ export function PitchDeck({ locale }: { locale: string }) {
                 <li>· Trending «Ενεργοί Φάκελοι» + inline badge + subscribe.</li>
             </ul>
             <Button asChild className="mt-6" size="lg">
-                <Link href={`/${locale}/dev/dossiers`}>
+                <Link href={`/${locale}/dev/dossiers/orestiada`}>
                     Ανοίξτε το live demo (Ορεστιάδα)
                     <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -262,10 +262,10 @@ export function PitchDeck({ locale }: { locale: string }) {
                 Ας δώσουμε στις δημοτικές υποθέσεις ένα όνομα και μια μνήμη.
             </h2>
             <p className="mt-5 text-xl text-muted-foreground">
-                Τα δεδομένα υπάρχουν. Οι πηγές υπάρχουν. Λείπει μόνο η αφήγηση.
+                Τα δεδομένα και οι πηγές υπάρχουν ήδη. Αυτό που λείπει είναι η αφήγηση που τα συνδέει.
             </p>
             <Button asChild className="mt-8" size="lg">
-                <Link href={`/${locale}/dev/dossiers`}>
+                <Link href={`/${locale}/dev/dossiers/orestiada`}>
                     Δείτε τους πραγματικούς Φακέλους Ορεστιάδας
                     <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -320,12 +320,12 @@ export function PitchDeck({ locale }: { locale: string }) {
             {/* dev banner */}
             <div className="flex items-center justify-between border-b px-4 py-2 text-xs">
                 <span className="font-semibold text-amber-700">DEV-ONLY · Pitch deck</span>
-                <Link href={`/${locale}/dev/dossiers`} className="text-muted-foreground hover:text-foreground">
+                <Link href={`/${locale}/dev/dossiers/orestiada`} className="text-muted-foreground hover:text-foreground">
                     → live demo
                 </Link>
             </div>
 
-            {/* slide area — click left/right halves to navigate */}
+            {/* slide area: click left/right halves to navigate */}
             <div className="relative flex-1 overflow-hidden">
                 <button
                     type="button"

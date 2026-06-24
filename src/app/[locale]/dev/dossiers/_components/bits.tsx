@@ -1,4 +1,4 @@
-import { Building2, Folder, Hammer, MapPin, Sparkles, Tag, TrendingUp } from "lucide-react";
+import { Building2, Hammer, MapPin, Sparkles, Tag, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { DossierType } from "../_data/orestiada-dossiers";
@@ -50,7 +50,7 @@ export function AiDisclosure({ className }: { className?: string }) {
 export function InlineBadge({ name }: { name: string }) {
     return (
         <span className="inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-2 py-1 text-sm font-medium text-primary">
-            <Folder className="h-4 w-4" />
+            <span aria-hidden="true">📁</span>
             Φάκελος: {name}
         </span>
     );
