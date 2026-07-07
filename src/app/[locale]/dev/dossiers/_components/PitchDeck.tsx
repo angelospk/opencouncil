@@ -48,36 +48,32 @@ export function PitchDeck({ locale }: { locale: string }) {
                 OpenCouncil · Φάκελοι
             </div>
             <h1 className="text-5xl font-bold leading-tight tracking-tight sm:text-6xl">
-                Φάκελοι: από αρχείο σε ζωντανή δημοτική δημοσιογραφία
+                Φάκελοι: από αρχείο σε δημοτική δημοσιογραφία
             </h1>
             <p className="mt-6 max-w-2xl text-xl text-muted-foreground">
-                Μια συνεχής αφήγηση ανά υπόθεση, με πηγές. Σαν το «Full Coverage» των ειδήσεων, αλλά για
-                το δημοτικό συμβούλιο.
+                Μία υπόθεση, ένα νήμα, με πηγές. Σαν το «Full Coverage» των ειδήσεων, για το δημοτικό
+                συμβούλιο.
             </p>
         </div>,
 
         <Slide key="problem" kicker="Το πρόβλημα" title="Τα subjects είναι αποσυνδεδεμένα γεγονότα">
             <ul className="space-y-3">
-                <li>Κάθε συνεδρίαση βγάζει δεκάδες θέματα, και το καθένα μένει μόνο του.</li>
-                <li>
-                    Η συνδρομή σε topic + location δεν αρκεί: ο πολίτης χάνει την εξέλιξη μιας υπόθεσης μέσα
-                    στον χρόνο.
-                </li>
-                <li>Η ιστορία ενός έργου ή ενός φορέα είναι σκορπισμένη σε 5–10 συνεδριάσεις.</li>
+                <li>Δεκάδες θέματα ανά συνεδρίαση, το καθένα μόνο του.</li>
+                <li>Συνδρομή σε topic + location δεν αρκεί: χάνεις την εξέλιξη στον χρόνο.</li>
+                <li>Μία υπόθεση σκορπισμένη σε 5-10 συνεδριάσεις.</li>
             </ul>
         </Slide>,
 
         <Slide key="insight" kicker="Η διαπίστωση" title="Λείπει ένα «named narrative object»">
             <p>
-                Το πρόβλημα δεν είναι ότι λείπει ένα φίλτρο. Λείπει η ίδια η οντότητα που αφορά τον πολίτη:
-                το Πολύκεντρο, το καταφύγιο αδέσποτων, ο ποταμός Άρδας. Καθεμιά με δικό της όνομα και δική
-                της σελίδα.
+                Δεν λείπει φίλτρο. Λείπει η οντότητα: το Πολύκεντρο, το καταφύγιο αδέσποτων, ο ποταμός
+                Άρδας. Καθεμιά με δικό της όνομα και δική της σελίδα.
             </p>
         </Slide>,
 
         <Slide key="what" kicker="Ορισμός" title="Τι είναι ένας Φάκελος">
             <p>
-                Ένα <strong>αντικειμενικό χρονολόγιο με πηγές</strong> που ακολουθεί μια οντότητα
+                Ένα <strong>αντικειμενικό χρονολόγιο με πηγές</strong>, που ακολουθεί μια οντότητα
                 (οργανισμό, έργο, τόπο ή θέμα) σε πολλές συνεδριάσεις.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3 text-base">
@@ -89,9 +85,7 @@ export function PitchDeck({ locale }: { locale: string }) {
                     1 αφήγηση ανά οντότητα
                 </span>
             </div>
-            <p className="mt-4 text-base">
-                Σχέση many-to-many: ένα subject μπορεί να ανήκει σε περισσότερους από έναν φακέλους.
-            </p>
+            <p className="mt-4 text-base">Many-to-many: ένα subject ανήκει σε πολλούς φακέλους.</p>
         </Slide>,
 
         <div key="proof" className="flex h-full flex-col justify-center">
@@ -100,11 +94,10 @@ export function PitchDeck({ locale }: { locale: string }) {
                 Η απόδειξη
             </div>
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Οι Φάκελοι προκύπτουν εμπειρικά από τα πραγματικά δεδομένα
+                Οι Φάκελοι βγαίνουν από τα ίδια τα δεδομένα
             </h2>
             <p className="mt-3 text-base text-muted-foreground">
-                Ανάλυση των {PILOT_STATS.subjects} subjects του Δήμου Ορεστιάδας ({PILOT_STATS.meetings}{" "}
-                συνεδριάσεις):
+                {PILOT_STATS.subjects} subjects Ορεστιάδας, {PILOT_STATS.meetings} συνεδριάσεις:
             </p>
             <div className="mt-4 overflow-hidden rounded-lg border">
                 <table className="w-full text-left text-sm">
@@ -132,24 +125,22 @@ export function PitchDeck({ locale }: { locale: string }) {
             </div>
             <p className="mt-4 text-lg">
                 <strong className="text-primary">{PILOT_STATS.citationPct}%</strong> των subjects έχουν{" "}
-                <strong>ήδη</strong> πηγές. Τα παραδείγματα του #291 <strong>δεν</strong> ήταν
-                cherry-picked· προέκυψαν από τα ίδια τα δεδομένα.
+                ήδη πηγές. Τα παραδείγματα του #291 δεν διαλέχτηκαν επίτηδες· βγήκαν από τα δεδομένα.
             </p>
         </div>,
 
         <Slide key="objective" kicker="Αντικειμενικότητα" title="Πώς ο Φάκελος μένει αντικειμενικός">
             <ul className="space-y-3">
                 <li>
-                    <strong>NPOV συμβόλαιο:</strong> δηλώνουμε γεγονότα, αποδίδουμε απόψεις («Ο Χ
-                    πρότεινε…»), χωρίς φορτισμένες λέξεις.
+                    <strong>NPOV:</strong> γεγονότα δηλωμένα, απόψεις αποδοσμένες («Ο Χ πρότεινε…»), χωρίς
+                    φορτισμένες λέξεις.
                 </li>
                 <li>
-                    <strong>Δομημένες κάρτες:</strong> ημερομηνία + ουδέτερη σύνοψη + (προαιρετικά) δήλωση
-                    με απόδοση + σύνδεσμος στην πρωτογενή πηγή.
+                    <strong>Κάρτα:</strong> ημερομηνία, ουδέτερη σύνοψη, απόδοση, σύνδεσμος στην πηγή.
                 </li>
                 <li className="flex items-center gap-2">
                     <Sparkles className="h-5 w-5 text-violet-500" />
-                    <span>Ορατή ένδειξη «Σύνοψη από AI · ελέγξτε τις πηγές».</span>
+                    <span>Ένδειξη «Σύνοψη από AI · ελέγξτε τις πηγές».</span>
                 </li>
             </ul>
         </Slide>,
@@ -159,7 +150,7 @@ export function PitchDeck({ locale }: { locale: string }) {
                 Κλιμάκωση πηγών
             </div>
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                Οι εξωτερικές πηγές κλιμακώνονται ανά τύπο οντότητας
+                Οι πηγές αλλάζουν ανά τύπο οντότητας
             </h2>
             <div className="mt-5 overflow-hidden rounded-lg border">
                 <table className="w-full text-left text-sm">
@@ -184,16 +175,15 @@ export function PitchDeck({ locale }: { locale: string }) {
                 </table>
             </div>
             <p className="mt-4 text-base text-muted-foreground">
-                Σχολείο ή απλό τοπικό θέμα → καμία ή ελάχιστη εξωτερική πηγή, μόνο το εσωτερικό χρονολόγιο.
+                Σχολείο ή απλό τοπικό θέμα: ελάχιστη ή καμία εξωτερική πηγή, μόνο το εσωτερικό χρονολόγιο.
             </p>
         </div>,
 
         <Slide key="arch" kicker="Αρχιτεκτονική" title="Χτίζει πάνω σε ό,τι υπάρχει ήδη">
             <ul className="space-y-3">
                 <li>
-                    Το <code className="rounded bg-muted px-1.5 py-0.5 text-base">Subject.contextCitationUrls</code>{" "}
-                    παράγεται ήδη από Claude web_search: {PILOT_STATS.withCitations}/{PILOT_STATS.subjects}{" "}
-                    subjects το έχουν.
+                    <code className="rounded bg-muted px-1.5 py-0.5 text-base">Subject.contextCitationUrls</code>:
+                    ήδη από Claude web_search ({PILOT_STATS.withCitations}/{PILOT_STATS.subjects}).
                 </li>
                 <li>
                     Το <code className="rounded bg-muted px-1.5 py-0.5 text-base">Subject</code> έχει ήδη{" "}
@@ -202,7 +192,7 @@ export function PitchDeck({ locale }: { locale: string }) {
                     <code className="rounded bg-muted px-1.5 py-0.5 text-base">decision</code>.
                 </li>
                 <li>
-                    Ο <strong>Φάκελος</strong> είναι ένα cross-meeting layer: ένα μοντέλο{" "}
+                    Ο <strong>Φάκελος</strong> είναι cross-meeting layer: μοντέλο{" "}
                     <code className="rounded bg-muted px-1.5 py-0.5 text-base">Dossier</code> + join{" "}
                     <code className="rounded bg-muted px-1.5 py-0.5 text-base">DossierSubject</code>.
                 </li>
@@ -212,17 +202,17 @@ export function PitchDeck({ locale }: { locale: string }) {
         <Slide key="discovery" kicker="Ανακάλυψη" title="Πώς το βρίσκει ο πολίτης">
             <ul className="space-y-3">
                 <li>
-                    <strong>Trending score:</strong> linked subjects × λεπτά συζήτησης × συνδρομητές ×
-                    recency → ενότητα «Ενεργοί Φάκελοι» στην αρχική.
+                    <strong>Trending:</strong> linked subjects × λεπτά συζήτησης × συνδρομητές × recency →
+                    «Ενεργοί Φάκελοι» στην αρχική.
                 </li>
                 <li>
-                    <strong>Inline badge</strong> πάνω στο subject:{" "}
+                    <strong>Badge</strong> στο subject:{" "}
                     <span className="inline-flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/5 px-2 py-1 text-base font-medium text-primary">
                         <Folder className="h-4 w-4" /> Φάκελος: Πολύκεντρο
                     </span>
                 </li>
                 <li>
-                    <strong>Subscribe → notify</strong> σε κάθε νέα καταχώρηση του φακέλου.
+                    <strong>Subscribe →</strong> ειδοποίηση σε κάθε νέα καταχώρηση.
                 </li>
             </ul>
         </Slide>,
@@ -230,14 +220,11 @@ export function PitchDeck({ locale }: { locale: string }) {
         <Slide key="naming" kicker="Ονοματοδοσία" title="Γιατί «Φάκελος» κι όχι «Stories»">
             <div className="flex items-start gap-3">
                 <Quote className="mt-1 h-8 w-8 shrink-0 text-primary/40" />
-                <div>
-                    <p>
-                        Το «Stories» παραπέμπει στο Instagram, σε κάτι εφήμερο και προσωπικό. Ο{" "}
-                        <strong>«Φάκελος»</strong> λέει το αντίθετο: θεσμική μνήμη που τεκμηριώνεται και
-                        μένει.
-                    </p>
-                    <p className="mt-3">Είναι η λέξη που χρησιμοποιεί ήδη η δημοσιογραφία για μια υπόθεση που εξελίσσεται.</p>
-                </div>
+                <p>
+                    Το «Stories» θυμίζει Instagram: εφήμερο, προσωπικό. Ο <strong>«Φάκελος»</strong> λέει το
+                    αντίθετο: θεσμική μνήμη που μένει. Είναι η λέξη που χρησιμοποιεί ήδη η δημοσιογραφία για
+                    μια υπόθεση που εξελίσσεται.
+                </p>
             </div>
         </Slide>,
 
@@ -246,7 +233,7 @@ export function PitchDeck({ locale }: { locale: string }) {
                 <li>· Μοντέλο <code className="rounded bg-muted px-1.5 py-0.5">Dossier</code> + many-to-many join.</li>
                 <li>· AI σύνοψη NPOV + entity-level external context.</li>
                 <li>· Σελίδα φακέλου με χρονολόγιο, πηγές, decisions.</li>
-                <li>· Trending «Ενεργοί Φάκελοι» + inline badge + subscribe.</li>
+                <li>· Trending «Ενεργοί Φάκελοι» + badge + subscribe.</li>
             </ul>
             <Button asChild className="mt-6" size="lg">
                 <Link href={`/${locale}/dev/dossiers/orestiada`}>
@@ -262,7 +249,7 @@ export function PitchDeck({ locale }: { locale: string }) {
                 Ας δώσουμε στις δημοτικές υποθέσεις ένα όνομα και μια μνήμη.
             </h2>
             <p className="mt-5 text-xl text-muted-foreground">
-                Τα δεδομένα και οι πηγές υπάρχουν ήδη. Αυτό που λείπει είναι η αφήγηση που τα συνδέει.
+                Τα δεδομένα και οι πηγές υπάρχουν ήδη. Λείπει η αφήγηση που τα συνδέει.
             </p>
             <Button asChild className="mt-8" size="lg">
                 <Link href={`/${locale}/dev/dossiers/orestiada`}>
