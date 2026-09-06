@@ -156,8 +156,6 @@ export function SubjectListContainer({
         persons={people}
         showContext={showContext}
         openInNewTab={openInNewTab}
-        nameHighlight={subject.nameHighlight}
-        descriptionHighlight={subject.descriptionHighlight}
       />
     );
   }, [cityData, statistics, showContext, openInNewTab, variant, onSubjectOpen, subjects]);

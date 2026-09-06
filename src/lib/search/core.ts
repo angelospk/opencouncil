@@ -1,7 +1,7 @@
 import { Client } from '@elastic/elasticsearch';
 import { Prisma, Realm } from '@prisma/client';
 import prisma from "@/lib/db/prisma";
-import { SearchRequest, SearchResponse, SearchResultLight, SearchResultDetailed, SubjectDocument, ExtractedFilters, DerivedFilters } from './types';
+import { SearchRequest, SearchResponse, SearchResultLight, SearchResultDetailed, SubjectDocument, ExtractedFilters, DerivedFilters, SearchMatches } from './types';
 import { buildSearchQuery } from './query';
 import { extractFilters, processFilters, NO_EXTRACTED_FILTERS } from './filters';
 import { sendErrorAdminAlert } from '@/lib/discord';
@@ -54,15 +54,12 @@ type SubjectDiscussionSegment = Prisma.SpeakerSegmentGetPayload<{ include: typeo
 
 /** One Elasticsearch hit that survived the release re-check, in relevance order.
  *
- * The highlight fragments are the whole field with the matched spans wrapped in
- * sentinel markers (see ./constants), carried across the retrieval/hydration
- * seam because only the query knows what matched. Present only when
- * `config.enableHighlights` asked for them. */
+ * `matches` crosses the retrieval/hydration seam because only the query knows
+ * what matched; see SearchMatches. */
 export type SubjectSearchHit = {
     id: string;
     score: number;
-    nameHighlight?: string;
-    descriptionHighlight?: string;
+    matches?: SearchMatches;
 };
 
 /** What retrieval knows before anything is hydrated. */
@@ -305,8 +302,10 @@ export async function searchSubjectsInRealm(
             hits: resolved.map(({ hit, subject }) => ({
                 id: subject.id,
                 score: hit._score || 0,
-                nameHighlight: hit.highlight?.name?.[0],
-                descriptionHighlight: hit.highlight?.description?.[0],
+                matches: hit.highlight && {
+                    name: hit.highlight.name?.[0],
+                    description: hit.highlight.description?.[0],
+                },
             })),
             total: totalHits - dropped,
             dropped,
@@ -435,7 +434,7 @@ export async function searchInRealm(
             locationCoordinates.map(loc => [loc.id, { x: loc.x, y: loc.y }])
         );
 
-        const results = hits.flatMap(({ id, score, nameHighlight, descriptionHighlight }) => {
+        const results = hits.flatMap(({ id, score, matches }) => {
             const subject = subjectMap.get(id);
             // Retrieval already re-checked every id against the database, so a
             // miss here means the row went away between the two queries. Drop
@@ -459,8 +458,7 @@ export async function searchInRealm(
                 ...subject,
                 location: locationWithCoordinates,
                 score,
-                nameHighlight,
-                descriptionHighlight,
+                matches,
                 councilMeeting: subject.councilMeeting,
                 votes: [],
                 attendance: []

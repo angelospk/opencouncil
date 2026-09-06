@@ -13,7 +13,8 @@ export interface SubjectCardContentProps {
     locationText?: string | null;
     /** Agenda marker (e.g. "#3" or "Προ ημερησίας"); omit when null. */
     agendaLabel?: string | null;
-    /** Description, already markdown-stripped. */
+    /** Inline content. The caller has already stripped markdown and resolved
+     *  any search emphasis. */
     description?: React.ReactNode;
     /** Optional media above the description (app: highlight video). */
     mediaSlot?: React.ReactNode;
